@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Chat Program</title>
-    <link rel="stylesheet" href="/style.css">
-    <script src="/script.js"></script>
+    <title>Live Chat</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello World</h1>
+    <div id="chat-container">
+      <input type="text" id="username" placeholder=" Please enter your username">
+        <div id="messages"></div>
+        <div id="active-users">
+            <h2>Active Users</h2>
+        </div>
+        <input type="text" id="messageInput" placeholder=" Please enter your message">
+        <button id="send">Send</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
