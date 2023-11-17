@@ -26,13 +26,13 @@ socket.addEventListener('message', (event) => {
 sendButton.addEventListener('click', sendMessage);
 
 function sendMessage() {
-  if (messageInput.value.trim() === '' || !username) {
+  if (!messageInput || !username) {
     alert('Please enter a username and a message.');
     return;
   }
   const message = messageInput.value;
   socket.send(JSON.stringify({ type: 'message', username, message }));
-  displayMessage(username, message); // Nachricht sofort anzeigen
+  displayMessage(username, message); 
   messageInput.value = '';
 }
 

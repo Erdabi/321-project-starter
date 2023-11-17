@@ -1,5 +1,5 @@
 let pool = null;
-
+ 
 const initializeMariaDB = () => {
   const mariadb = require("mariadb");
   pool = mariadb.createPool({
@@ -10,7 +10,7 @@ const initializeMariaDB = () => {
     connectionLimit: 5,
   });
 };
-
+ 
 const executeSQL = async (query) => {
   let conn;
   try {
@@ -23,7 +23,7 @@ const executeSQL = async (query) => {
     if (conn) conn.release();
   }
 };
-
+ 
 const initializeDBSchema = async () => {
   const userTableQuery = `CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT,
@@ -40,5 +40,20 @@ const initializeDBSchema = async () => {
   );`;
   await executeSQL(messageTableQuery);
 };
-
-module.exports = { executeSQL, initializeMariaDB, initializeDBSchema };
+ 
+ 
+const saveMessageToDB = async (username, message) => {
+  const userId = await addUserToDB(username);
+  const insertMessageQuery = `INSERT INTO messages (user_id, message) VALUES (${userId}, '${message}')`;
+  await executeSQL(insertMessageQuery);
+};
+ 
+const addUserToDB = async (username) => {
+  const addUserQuery = `INSERT INTO users (name) VALUES ('${username}')`;
+  const result = await executeSQL(addUserQuery);
+  return result.insertId;
+};
+ 
+module.exports = { executeSQL, initializeMariaDB, initializeDBSchema, saveMessageToDB, addUserToDB };
+ 
+ 
