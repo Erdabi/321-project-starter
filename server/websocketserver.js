@@ -1,5 +1,5 @@
 const WebSocket = require("ws");
-const { saveMessageToDB } = require('./database');
+const { saveMessageToDB, addUserToDB, getUserByName } = require('./database');
 const connectedUsers = new Map();
  
 const initializeWebsocketServer = (server) => {
@@ -9,11 +9,15 @@ const initializeWebsocketServer = (server) => {
     ws.on("close", () => onClose(ws, websocketServer));
   });
 };
- 
- 
-const onMessage = (ws, message, websocketServer) => {
+
+
+const onMessage = async (ws, message, websocketServer) => {
   const data = JSON.parse(message);
   if (data.type === 'join') {
+    const user = await getUserByName(data.username);
+  if (!user) {
+    await addUserToDB(data.username);
+  }
     connectedUsers.set(ws, data.username);
     broadcastUserList(websocketServer);
   } else if (data.type === 'message') {
