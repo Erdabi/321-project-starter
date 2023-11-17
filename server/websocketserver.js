@@ -17,7 +17,7 @@ const onMessage = (ws, message, websocketServer) => {
     connectedUsers.set(ws, data.username);
     broadcastUserList(websocketServer);
   } else if (data.type === 'message') {
-    saveMessageToDB(data.userId, data.message);
+    saveMessageToDB(data.username, data.message);
     broadcastMessage(websocketServer, data.username, data.message);
   }
 };
@@ -30,14 +30,17 @@ const onClose = (ws, websocketServer) => {
 const broadcastUserList = (websocketServer) => {
   const userList = Array.from(connectedUsers.values());
   websocketServer.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
     client.send(JSON.stringify({ type: 'userList', users: userList }));
+    }
   });
 };
  
 const broadcastMessage = (websocketServer, username, message) => {
   websocketServer.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ username, message }));
+      client.send(JSON.stringify({ type: 'message', username, message
+     }));
     }
   });
 };
