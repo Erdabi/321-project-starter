@@ -28,7 +28,7 @@ services:
       - 9200:80
 
   nodejs:
-    image: erdamca/321-project
+    image: erdamca/321-project:latest
     depends_on:
       - mariadb
     ports:
